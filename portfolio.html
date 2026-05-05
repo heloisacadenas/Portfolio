@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio - Heloisa Cadenas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #111111;
+    --bg3: #161616;
+    --cream: #f0ebe0;
+    --accent: #ff00a2;
+    --accent-alt: #c6ff33;
+    --accent2: #ff4167;
+    --muted: #555;
+    --text: #e8e4dc;
+    --border: rgba(255,255,255,0.07);
+    --grad: linear-gradient(to right bottom, #000000, #2c0c1c, #4f093a, #6d0363, #811197, #ad069e, #d700a2, #ff00a2, #ff4167, #ff8a28, #ffc900, #c6ff33);
+    --grad-right: linear-gradient(to right, #ff00a2, #ff4167, #ff8a28, #ffc900, #c6ff33);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Ajustes para o SweetAlert acompanhar o design */
+.swal-custom-popup {
+  border: 1px solid var(--border) !important;
+  border-radius: 20px !important;
+  font-family: 'DM Sans', sans-serif !important;
+}
+
+.swal-custom-title {
+  font-family: 'Syne', sans-serif !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.swal-custom-button {
+  border-radius: 100px !important;
+  padding: 12px 30px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  font-size: 0.8rem !important;
+}
+
+  /* Custom cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid rgba(255,0,162,0.5);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s ease, width 0.3s, height 0.3s;
+  }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    padding: 20px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    backdrop-filter: blur(20px);
+    background: rgba(10,10,10,0.7);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.1rem;
+    letter-spacing: -0.02em; color: var(--text);
+    text-decoration: none;
+  }
+  .nav-logo span { background: var(--grad-right); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  nav ul {
+    list-style: none; display: flex; gap: 36px; align-items: center;
+  }
+  nav ul a {
+    color: var(--muted); text-decoration: none;
+    font-size: 0.85rem; font-weight: 400; letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover { color: var(--text); }
+  .nav-cta {
+    background: var(--grad) !important;
+    -webkit-text-fill-color: white !important;
+    color: white !important;
+    padding: 8px 20px;
+    border-radius: 100px;
+    font-weight: 500 !important;
+    transition: opacity 0.2s !important;
+  }
+  .nav-cta:hover { opacity: 0.85 !important; }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 120px 48px 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero-content {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 60px;
+  }
+  .hero-text { flex: 1; min-width: 0; }
+  .hero-photo-wrap {
+    flex-shrink: 0;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+  .hero-photo-placeholder {
+    width: 300px; height: 380px;
+    border-radius: 24px;
+    border: 2px dashed rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.03);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .hero-photo-placeholder::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--grad);
+    opacity: 0.05;
+  }
+  .hero-photo-placeholder:hover { border-color: rgba(255,0,162,0.3); }
+  .hero-photo-inner {
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    position: relative; z-index: 1; text-align: center; padding: 24px;
+  }
+  .hero-photo-inner p {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.3);
+  }
+  .hero-photo-inner span {
+    font-size: 0.72rem; color: rgba(255,255,255,0.15);
+    font-family: monospace; letter-spacing: 0.02em;
+  }
+  .hero-photo-img {
+    width: 300px; height: 380px;
+    border-radius: 24px; object-fit: cover;
+    display: block;
+    border: 2px solid rgba(255,0,162,0.2);
+    box-shadow: 0 20px 60px rgba(255,0,162,0.15);
+  }
+  .hero-noise {
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; opacity: 0.4;
+  }
+  .hero-glow {
+    position: absolute; top: -200px; right: -200px;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(255,0,162,0.08) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-glow2 {
+    position: absolute; bottom: -150px; left: 10%;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(198,255,51,0.06) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,0,162,0.1);
+    border: 1px solid rgba(255,0,162,0.2);
+    color: var(--accent);
+    padding: 6px 16px; border-radius: 100px;
+    font-size: 0.78rem; font-weight: 500; letter-spacing: 0.06em;
+    text-transform: uppercase; margin-bottom: 32px;
+    width: fit-content;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-tag::before {
+    content: ''; width: 6px; height: 6px;
+    background: var(--grad-right); border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(3.5rem, 9vw, 8rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: var(--cream);
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  h1 em {
+    font-style: italic;
+    background: var(--grad-right);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+  }
+  .hero-subtitle {
+    margin-top: 28px; max-width: 480px;
+    color: var(--muted); font-size: 1rem;
+    font-weight: 300; line-height: 1.7;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+  .hero-actions {
+    margin-top: 44px; display: flex; gap: 16px; flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+  .btn-primary {
+    background: var(--grad); color: #fff;
+    padding: 14px 32px; border-radius: 100px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500;
+    text-decoration: none; display: inline-block;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 0 rgba(255,0,162,0);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,0,162,0.3); }
+  .btn-ghost {
+    background: transparent; color: var(--text);
+    padding: 14px 32px; border-radius: 100px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 400;
+    text-decoration: none; display: inline-block;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--cream); }
+
+  .hero-scroll {
+    position: absolute; bottom: 40px; left: 48px;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em;
+    text-transform: uppercase; animation: fadeUp 1s 0.6s ease both;
+  }
+  .scroll-line {
+    width: 40px; height: 1px; background: var(--muted);
+    position: relative; overflow: hidden;
+  }
+  .scroll-line::after {
+    content: ''; position: absolute; left: -100%; top: 0;
+    width: 100%; height: 100%; background: var(--grad-right);
+    animation: scrollLine 2s infinite ease;
+  }
+  @keyframes scrollLine { 0%{left:-100%} 100%{left:100%} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+  /* Stats bar */
+  .stats-bar {
+    padding: 0 48px 80px;
+    display: flex; gap: 1px; flex-wrap: wrap;
+  }
+  .stat-item {
+    flex: 1; min-width: 160px;
+    padding: 32px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .stat-item:first-child { border-radius: 16px 0 0 16px; }
+  .stat-item:last-child { border-radius: 0 16px 16px 0; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.4rem; font-weight: 800;
+    color: var(--cream); line-height: 1;
+  }
+  .stat-num span { background: var(--grad-right); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* SECTIONS */
+  section { padding: 100px 48px; position: relative; }
+  .section-label {
+    font-size: 0.72rem; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    background: var(--grad-right); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-label::before {
+    content: ''; width: 24px; height: 1px; background: var(--grad-right); flex-shrink: 0;
+  }
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: clamp(2rem, 4vw, 3.2rem);
+    letter-spacing: -0.02em; color: var(--cream); line-height: 1.1;
+  }
+
+  /* ABOUT */
+  #sobre { background: var(--bg); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    align-items: start; margin-top: 64px;
+  }
+  .about-text p {
+    color: #888; font-size: 1.05rem; line-height: 1.85;
+    font-weight: 300; margin-bottom: 20px;
+  }
+  .about-text p strong { color: var(--text); font-weight: 500; }
+  .skills-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    margin-top: 40px;
+  }
+  .skill-pill {
+    padding: 12px 18px;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 10px; font-size: 0.85rem; color: var(--text);
+    display: flex; align-items: center; gap: 10px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .skill-pill:hover { border-color: rgba(255,0,162,0.3); background: rgba(255,0,162,0.04); }
+  .skill-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--grad-right); flex-shrink: 0; }
+  .about-right { display: flex; flex-direction: column; gap: 24px; }
+  .info-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px 32px;
+    transition: border-color 0.3s;
+  }
+  .info-card:hover { border-color: rgba(255,255,255,0.12); }
+  .info-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    background: var(--grad-right); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: 16px;
+  }
+  .info-card p, .info-card li {
+    font-size: 0.9rem; color: #777; font-weight: 300;
+    line-height: 1.8;
+  }
+  .info-card ul { list-style: none; }
+  .info-card ul li::before { content: '↗ '; color: var(--accent); font-size: 0.8rem; }
+
+  /* PROJECTS */
+  #projetos { background: var(--bg3); }
+  .projects-header { margin-bottom: 56px; }
+  .projects-header h2 { margin-bottom: 0; }
+  .category-tabs {
+    display: flex; gap: 8px; margin-top: 36px; flex-wrap: wrap;
+  }
+/* Estilo base dos botões */
+.tab {
+  padding: 8px 22px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  font-size: 0.8rem;
+  font-weight: 600; /* Um pouco mais de peso ajuda no contraste */
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Estado Ativo/Clicado - O degradê volta aqui */
+.tab.active {
+  background: var(--grad) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  
+  /* Reset vital para o texto não sumir */
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  -webkit-text-fill-color: #ffffff !important;
+  
+  box-shadow: 0 8px 20px rgba(255, 0, 162, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Hover suave para os botões não ativos */
+.tab:hover:not(.active) {
+  border-color: var(--accent);
+  color: var(--text);
+  background: rgba(255, 0, 162, 0.05);
+}
+
+.tab:hover {
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  background: rgba(255, 0, 162, 0.05);
+}
+  .projects-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  }
+  .project-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 20px; overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+    position: relative;
+  }
+  .project-card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.12); }
+  .project-card.featured {
+    grid-column: span 2;
+  }
+
+  .project-card.hidden { display: none; }
+  .card-thumb {
+    height: 220px; overflow: hidden; position: relative;
+  }
+  .card-thumb .thumb-bg {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem; position: relative;
+    transition: transform 0.4s;
+  }
+  .project-card:hover .thumb-bg { transform: scale(1.04); }
+  .card-thumb .thumb-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 50%, rgba(17,17,17,0.9) 100%);
+  }
+  .card-type {
+    position: absolute; top: 16px; left: 16px;
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 4px 12px;
+    border-radius: 100px;
+  }
+  .card-type.fe { background: rgba(255,0,162,0.15); color: #ff00a2; border: 1px solid rgba(255,0,162,0.3); }
+  .card-type.be { background: rgba(255,137,40,0.15); color: #ff8a28; border: 1px solid rgba(255,137,40,0.3); }
+  .card-type.ui { background: rgba(198,255,51,0.12); color: #c6ff33; border: 1px solid rgba(198,255,51,0.3); }
+  .card-body { padding: 24px; }
+  .card-body h3 {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 1.1rem; color: var(--cream); margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .card-body p { font-size: 0.85rem; color: #666; line-height: 1.6; }
+  .card-tags {
+    display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap;
+  }
+  .card-tag {
+  font-size: 0.72rem; 
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.08); 
+  border-radius: 4px;
+  color: var(--text); /* Usa o tom creme/branco que você definiu */
+  letter-spacing: 0.04em;
+}
+  .card-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 18px; font-size: 0.82rem;
+    background: var(--grad-right); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    text-decoration: none; font-weight: 500;
+    transition: gap 0.2s;
+  }
+  .card-link:hover { gap: 10px; }
+
+  /* Project image placeholder */
+  .project-img-slot {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    position: absolute; inset: 0;
+    z-index: 1;
+  }
+  .project-img-placeholder {
+    position: absolute; inset: 0; z-index: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.15);
+    font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase;
+    pointer-events: none;
+  }
+  /* Featured card */
+  .featured .card-thumb { height: 280px; }
+
+  /* CONTACT */
+  #contato { background: var(--bg); }
+  .contact-wrap {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    margin-top: 64px; align-items: start;
+  }
+  .contact-left h2 { margin-bottom: 20px; }
+  .contact-left p { color: #666; font-size: 1rem; line-height: 1.8; font-weight: 300; max-width: 400px; }
+  .contact-links { margin-top: 40px; display: flex; flex-direction: column; gap: 16px; }
+  .contact-link-item {
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 20px; background: var(--bg2);
+    border: 1px solid var(--border); border-radius: 12px;
+    text-decoration: none; color: var(--text);
+    font-size: 0.9rem; transition: border-color 0.2s, background 0.2s;
+  }
+  .contact-link-item:hover { border-color: rgba(255,0,162,0.3); background: rgba(255,0,162,0.04); }
+  .contact-link-item .icon {
+    width: 36px; height: 36px; background: rgba(255,0,162,0.1);
+    border-radius: 8px; display: flex; align-items: center;
+    justify-content: center; font-size: 1rem; flex-shrink: 0;
+  }
+  .contact-link-item span:last-child { color: #555; margin-left: auto; font-size: 0.8rem; }
+
+  
+
+  /* Form */
+  .contact-form { display: flex; flex-direction: column; gap: 16px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-group label {
+    font-size: 0.75rem; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase; color: #555;
+  }
+  .form-group input, .form-group textarea, .form-group select {
+    background: var(--bg2); border: 1px solid var(--border);
+    color: var(--text); padding: 14px 18px;
+    border-radius: 12px; font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem; outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    resize: none;
+  }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    border-color: rgba(255,0,162,0.4);
+    background: rgba(255,0,162,0.03);
+  }
+  .form-group input::placeholder, .form-group textarea::placeholder { color: #3a3a3a; }
+  .form-group textarea { height: 130px; }
+  .form-group select option { background: #161616; }
+  .btn-submit {
+    background: var(--grad); color: #fff;
+    padding: 16px 40px; border-radius: 100px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600;
+    border: none; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+    align-self: flex-start; margin-top: 8px; display: flex; align-items: center; gap: 10px;
+  }
+  .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,0,162,0.3); }
+  .btn-submit.sent { background: var(--grad); opacity: 0.7; }
+
+  /* Footer */
+  footer {
+    padding: 32px 48px;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  footer p { font-size: 0.8rem; color: #333; }
+  footer p strong { background: var(--grad-right); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a {
+    font-size: 0.78rem; color: #333; text-decoration: none;
+    transition: color 0.2s; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .footer-links a:hover { color: var(--text); }
+
+  /* Divider line */
+  .divider { height: 1px; background: var(--border); margin: 0 48px; }
+
+  /* Scroll reveal */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ===== RESPONSIVIDADE ===== */
+
+  /* Hamburguer menu */
+  .nav-hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    background: none; border: none; cursor: pointer; padding: 4px;
+  }
+  .nav-hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: var(--text); border-radius: 2px;
+    transition: all 0.3s;
+  }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* Tablet (≤ 1024px) */
+  @media (max-width: 1024px) {
+    nav { padding: 16px 28px; }
+    #hero { padding: 110px 28px 70px; }
+    .hero-content { gap: 40px; }
+    .hero-photo-placeholder, .hero-photo-img { width: 240px; height: 300px; }
+    section { padding: 80px 28px; }
+    .stats-bar { padding: 0 28px 60px; }
+    .divider { margin: 0 28px; }
+    footer { padding: 28px; }
+    .projects-grid { grid-template-columns: repeat(2, 1fr); }
+    .project-card.featured { grid-column: span 2; }
+    .about-grid { grid-template-columns: 1fr; gap: 48px; }
+    .contact-wrap { grid-template-columns: 1fr; gap: 48px; }
+  }
+
+  /* Mobile (≤ 768px) */
+  @media (max-width: 768px) {
+    body { cursor: auto; }
+    .cursor, .cursor-ring { display: none; }
+
+    nav { padding: 14px 20px; }
+    nav ul {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10,10,10,0.98); backdrop-filter: blur(20px);
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 32px; z-index: 99;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    nav ul.open { opacity: 1; pointer-events: all; }
+    nav ul a { font-size: 1.2rem; }
+    .nav-hamburger { display: flex; z-index: 100; }
+    .nav-cta { padding: 12px 32px !important; }
+
+    #hero { padding: 100px 20px 60px; }
+    .hero-content { flex-direction: column-reverse; gap: 32px; align-items: flex-start; }
+    .hero-photo-wrap { width: 100%; display: flex; justify-content: center; }
+    .hero-photo-placeholder, .hero-photo-img { width: 200px; height: 250px; border-radius: 18px; }
+    .hero-scroll { left: 20px; }
+
+    section { padding: 60px 20px; }
+    .stats-bar { padding: 0 20px 48px; }
+    .stat-item { min-width: 140px; padding: 24px; }
+    .stat-item:first-child, .stat-item:last-child { border-radius: 12px; }
+    .divider { margin: 0 20px; }
+    footer { padding: 24px 20px; flex-direction: column; align-items: flex-start; gap: 12px; }
+    .footer-links { gap: 16px; }
+
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card.featured { grid-column: span 1; }
+    .featured .card-thumb { height: 220px; }
+
+    .about-grid { grid-template-columns: 1fr; gap: 40px; margin-top: 40px; }
+    .skills-grid { grid-template-columns: 1fr; }
+
+    .contact-wrap { grid-template-columns: 1fr; gap: 40px; margin-top: 40px; }
+    .form-row { grid-template-columns: 1fr; }
+
+    h1 { font-size: clamp(2.8rem, 13vw, 5rem); }
+    h2 { font-size: clamp(1.7rem, 6vw, 2.4rem); }
+  }
+
+  /* Pequeno mobile (≤ 480px) */
+  @media (max-width: 480px) {
+    nav { padding: 12px 16px; }
+    #hero { padding: 90px 16px 50px; }
+    section { padding: 48px 16px; }
+    .stats-bar { padding: 0 16px 40px; }
+    .divider { margin: 0 16px; }
+    footer { padding: 20px 16px; }
+    .hero-actions { flex-direction: column; }
+    .btn-primary, .btn-ghost { width: 100%; text-align: center; justify-content: center; }
+    .stat-item { min-width: 120px; padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">helô's<span>.</span>portfolio</a>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Abrir menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul id="navMenu">
+    <li><a href="#sobre" class="nav-link">Sobre mim</a></li>
+    <li><a href="#projetos" class="nav-link">Projetos</a></li>
+    <li><a href="#contato" class="nav-cta nav-link">Contato</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-noise"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-tag">Disponível para trabalho</div>
+      <h1>
+        Full-stack<br>
+        <em>developer.</em>
+      </h1>
+      <p class="hero-subtitle" style="text-align: justify;">Olá! Meu nome é Heloisa, tenho 20 anos e sou estudante de Engenharia de Software com formação técnica em Informática para Internet. Tenho paixão tanto por estética quanto a funcionalidade, procuro construir websites e aplicações que não apenas são visualmente atraentes, mas também que sejam inovadoras e amigáveis para o usuário :)</p>
+      <div class="hero-actions">
+        <a href="#projetos" class="btn-primary">Ver projetos ↓</a>
+        <a href="#contato" class="btn-ghost">Entrar em contato</a>
+      </div>
+    </div>
+    <div class="hero-photo-wrap">
+      <div class="hero-photo-placeholder">
+        <div class="hero-photo-inner">
+            <img src="/img/pfp3.jpeg" alt="Heloisa Cadenas" class="hero-photo-img">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll para explorar
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="section-label reveal">Sobre mim</div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <h2>Sou uma estudante <em style="font-style:italic;background:var(--grad-right);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">apaixonada</em> por tecnologia & design.</h2>
+      <br>
+      <p style="text-align: justify;">O que me aproximou da área de desenvolvimento foi o <strong>design</strong>, e ao iniciar o técnico em Informática para Internet, conheci o <strong>desenvolvimento front-end</strong> e me encantei com a possibilidade de transformar ideias em interfaces interativas. Desde então, na faculdade, venho explorando tanto o <strong>front-end</strong> quanto o  <strong>back-end</strong>, buscando sempre criar experiências digitais que sejam inovadoras e funcionais.</p>
+      <div class="skills-grid" style="margin-top:40px;">
+        <div class="skill-pill"><span class="dot"></span>HTML avançado</div>
+        <div class="skill-pill"><span class="dot"></span>CSS avançado</div>
+        <div class="skill-pill"><span class="dot"></span>JavaScript</div>
+        <div class="skill-pill"><span class="dot"></span>PHP</div>
+        <div class="skill-pill"><span class="dot"></span>SQL</div>
+        <div class="skill-pill"><span class="dot"></span>Python</div>
+        <div class="skill-pill"><span class="dot"></span>Java</div>
+        <div class="skill-pill"><span class="dot"></span>Git & GitHub</div>
+        <div class="skill-pill"><span class="dot"></span>Bootstrap</div>
+        <div class="skill-pill"><span class="dot"></span>Figma - UX/UI Design</div>
+        <div class="skill-pill"><span class="dot"></span>UML, BPMN e DFD</div>
+        
+        <div class="skill-pill"><span class="dot"></span>VBScript</div>
+      </div>
+    </div>
+    <div class="about-right reveal">
+      <div class="info-card">
+        <h3>Formação</h3>
+        <ul>
+          <li>Bacharelado em Engenharia de Software - Uninter (2026-2029)</li>
+          <li>Tecnólogo em Análise e Desenvolvimento de Sistemas - Fatec (fev/2025-dez/2025)</li>
+          <li>Técnico em Informática para Internet - Etec Lauro Gomes (2022-2024)</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>Experiência</h3>
+        <ul>
+          <li>Desenvolvedora Front-end (Projetos acadêmicos) - Etec Lauro Gomes (2022-2024)</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>Idiomas</h3>
+        <ul>
+          <li>Português — Nativo</li>
+          <li>Inglês — TOEIC 695 pontos (B2)</li>
+          <li>Espanhol — (A1)</li>
+        </ul>
+      </div>
+      <div class="info-card" style="border-color:rgba(255,0,162,0.15); background:rgba(255,0,162,0.03);">
+        <h3>Interesses</h3>
+        <p style="background:var(--grad-right);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; font-weight:400; font-size:0.95rem;">Estágio em desenvolvimento de software, inteligência artificial, dados, infraestrutura ou suporte técnico. Também aberta a jovem aprendiz e Freelance.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROJETOS -->
+<section id="projetos">
+  <div class="projects-header reveal">
+    <div class="section-label">Projetos</div>
+    <h2>Projetos acadêmicos e pessoais</h2>
+    <div class="category-tabs">
+      <button class="tab active" data-filter="all">Todos</button>
+      <button class="tab" data-filter="fe">Front-End</button>
+      <button class="tab" data-filter="be">Back-End</button>
+      <button class="tab" data-filter="fs">Full-Stack</button>
+      <button class="tab" data-filter="ui">UI/UX Design</button>
+    </div>
+  </div>
+
+  <div class="projects-grid">
+    <!-- FE Featured -->
+    <div class="project-card featured reveal" data-cat="fe">
+      <div class="card-thumb">
+        <!-- IMAGEM DO PROJETO: substitua o comentário abaixo por <img src="sua-imagem.jpg" alt="Orba Agency" class="project-img-slot"> -->
+        <img src="img/orba.png" alt="Orba Agency Website" class="project-img-slot">
+        <div class="thumb-bg" style="background: linear-gradient(135deg, #0f1a0a 0%, #1a2d0f 50%, #0d1c0a 100%);">
+          <svg width="100%" height="100%" style="position:absolute;inset:0;" viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#c8f542" stop-opacity="0.15"/>
+                <stop offset="100%" stop-color="#c8f542" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <rect width="600" height="280" fill="url(#g1)"/>
+            <rect x="40" y="40" width="220" height="140" rx="12" fill="rgba(200,245,66,0.06)" stroke="rgba(200,245,66,0.15)" stroke-width="1"/>
+            <rect x="60" y="60" width="80" height="8" rx="4" fill="rgba(200,245,66,0.3)"/>
+            <rect x="60" y="78" width="140" height="6" rx="3" fill="rgba(255,255,255,0.08)"/>
+            <rect x="60" y="94" width="110" height="6" rx="3" fill="rgba(255,255,255,0.06)"/>
+            <rect x="60" y="120" width="50" height="28" rx="14" fill="rgba(200,245,66,0.2)"/>
+            <rect x="290" y="30" width="270" height="90" rx="10" fill="rgba(200,245,66,0.04)" stroke="rgba(200,245,66,0.1)" stroke-width="1"/>
+            <rect x="310" y="48" width="100" height="6" rx="3" fill="rgba(200,245,66,0.2)"/>
+            <rect x="310" y="64" width="200" height="5" rx="2.5" fill="rgba(255,255,255,0.06)"/>
+            <rect x="310" y="78" width="160" height="5" rx="2.5" fill="rgba(255,255,255,0.04)"/>
+            <text x="300" y="200" font-family="monospace" font-size="11" fill="rgba(200,245,66,0.4)">const app = () =&gt; &lt;Dashboard /&gt;;</text>
+            <text x="300" y="220" font-family="monospace" font-size="11" fill="rgba(200,245,66,0.2)">export default app;</text>
+          </svg>
+        </div>
+        <div class="thumb-overlay"></div>
+        <span class="card-type fe">Front-End</span>
+      </div>
+      <div class="card-body">
+        <h3>Orba Agency Website</h3>
+        <p>Website completo para agência de marketing digital, publicidade e propaganda, com design moderno e funcionalidades interativas.</p>
+        <div class="card-tags">
+          <span class="card-tag">HTML5</span>
+          <span class="card-tag">CSS3</span>
+          <span class="card-tag">JavaScript</span>
+          <span class="card-tag">Bootstrap</span>
+          <span class="card-tag">Figma</span>
+          <span class="card-tag">Photoshop</span>
+          <span class="card-tag">Canva</span>
+        </div>
+        <a href="https://heloisacadenas.github.io/Orba-Agency/" class="card-link" target="_blank">Ver projeto →</a>
+      </div>
+    </div>
+
+    <!-- BE card -->
+    <div class="project-card reveal" data-cat="be">
+      <div class="card-thumb">
+        <!-- IMAGEM DO PROJETO: substitua o comentário abaixo por <img src="sua-imagem.jpg" alt="API REST" class="project-img-slot"> -->
+        <img src="img/api.png" alt="API REST de Livros" class="project-img-slot">
+        <div class="thumb-bg" style="background: linear-gradient(135deg, #1a0f0a 0%, #2d1a0f 100%);">
+          <svg width="100%" height="100%" style="position:absolute;inset:0;" viewBox="0 0 280 220" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="30" width="240" height="160" rx="8" fill="rgba(255,107,53,0.05)" stroke="rgba(255,107,53,0.12)" stroke-width="1"/>
+            <text x="36" y="60" font-family="monospace" font-size="10" fill="rgba(255,107,53,0.6)">POST /api/v2/auth</text>
+            <text x="36" y="80" font-family="monospace" font-size="10" fill="rgba(255,255,255,0.2)">→ 200 OK · 24ms</text>
+            <text x="36" y="100" font-family="monospace" font-size="10" fill="rgba(255,107,53,0.4)">GET /api/v2/users</text>
+            <text x="36" y="120" font-family="monospace" font-size="10" fill="rgba(255,255,255,0.2)">→ 200 OK · 11ms</text>
+            <text x="36" y="140" font-family="monospace" font-size="10" fill="rgba(255,107,53,0.4)">DELETE /api/v2/post</text>
+            <text x="36" y="160" font-family="monospace" font-size="10" fill="rgba(255,255,255,0.2)">→ 204 No Content</text>
+          </svg>
+        </div>
+        <div class="thumb-overlay"></div>
+        <span class="card-type be">Back-End</span>
+      </div>
+      <div class="card-body">
+        <h3>API REST de Gerenciamento de Livros</h3>
+        <p>API REST simples desenvolvida em Python com Flask para gerenciar uma coleção de livros.
+O projeto permite consultar, adicionar, editar e remover livros através de requisições HTTP.</p>
+        <div class="card-tags">
+          <span class="card-tag">Python</span>
+          <span class="card-tag">Flask</span>
+        </div>
+        <a href="https://github.com/heloisacadenas/Sistema-API-de-livros-com-Python" class="card-link" target="_blank">Ver projeto →</a>
+      </div>
+    </div>
+
+    <!-- UI card -->
+    <div class="project-card reveal" data-cat="ui">
+      <div class="card-thumb">
+        <!-- IMAGEM DO PROJETO: substitua o comentário abaixo por <img src="sua-imagem.jpg" alt="Spotify Redesign" class="project-img-slot"> -->
+        <img src="img/spotify.png" alt="Spotify Redesign" class="project-img-slot">
+        <div class="thumb-bg" style="background: linear-gradient(135deg, #110f1a 0%, #1c1530 100%);">
+          <svg width="100%" height="100%" style="position:absolute;inset:0;" viewBox="0 0 280 220" xmlns="http://www.w3.org/2000/svg">
+            <rect x="30" y="25" width="100" height="170" rx="16" fill="rgba(139,92,246,0.08)" stroke="rgba(139,92,246,0.2)" stroke-width="1.5"/>
+            <rect x="42" y="48" width="76" height="60" rx="8" fill="rgba(139,92,246,0.12)"/>
+            <rect x="42" y="118" width="50" height="6" rx="3" fill="rgba(255,255,255,0.2)"/>
+            <rect x="42" y="132" width="70" height="4" rx="2" fill="rgba(255,255,255,0.08)"/>
+            <rect x="42" y="152" width="36" height="18" rx="9" fill="rgba(139,92,246,0.35)"/>
+            <rect x="150" y="40" width="110" height="75" rx="12" fill="rgba(139,92,246,0.06)" stroke="rgba(139,92,246,0.15)" stroke-width="1"/>
+            <rect x="162" y="55" width="60" height="5" rx="2.5" fill="rgba(139,92,246,0.4)"/>
+            <rect x="162" y="68" width="85" height="4" rx="2" fill="rgba(255,255,255,0.1)"/>
+            <rect x="162" y="80" width="70" height="4" rx="2" fill="rgba(255,255,255,0.06)"/>
+            <circle cx="205" cy="155" r="28" fill="rgba(139,92,246,0.08)" stroke="rgba(139,92,246,0.2)" stroke-width="1.5"/>
+            <text x="198" y="160" font-family="sans-serif" font-size="18" fill="rgba(139,92,246,0.5)">✦</text>
+          </svg>
+        </div>
+        <div class="thumb-overlay"></div>
+        <span class="card-type ui">UI/UX</span>
+      </div>
+      <div class="card-body">
+        <h3>Spotify Redesign - App</h3>
+        <p>Redesign da interface do aplicativo Spotify, focando em aprender a criar design funcionais e a trabalhar com o Figma</p>
+        <div class="card-tags">
+          <span class="card-tag">Figma</span>
+          <span class="card-tag">Alta fidelidade</span>
+          <span class="card-tag">Design System</span>
+        </div>
+        <a href="https://www.behance.net/gallery/243921857/Spotify-Redesign-Projeto-UXUI-design" class="card-link" target="_blank">Ver projeto →</a>
+      </div>
+    </div>
+
+        <!-- FS Featured -->
+    <div class="project-card featured reveal" data-cat="fs">
+      <div class="card-thumb">
+        <!-- IMAGEM DO PROJETO: substitua o comentário abaixo por <img src="sua-imagem.jpg" alt="Orba Agency" class="project-img-slot"> -->
+        <img src="img/carreira.png" alt="Orba Agency Website" class="project-img-slot">
+        <div class="thumb-bg" style="background: linear-gradient(135deg, #0f1a0a 0%, #1a2d0f 50%, #0d1c0a 100%);">
+          <svg width="100%" height="100%" style="position:absolute;inset:0;" viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#c8f542" stop-opacity="0.15"/>
+                <stop offset="100%" stop-color="#c8f542" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <rect width="600" height="280" fill="url(#g1)"/>
+            <rect x="40" y="40" width="220" height="140" rx="12" fill="rgba(200,245,66,0.06)" stroke="rgba(200,245,66,0.15)" stroke-width="1"/>
+            <rect x="60" y="60" width="80" height="8" rx="4" fill="rgba(200,245,66,0.3)"/>
+            <rect x="60" y="78" width="140" height="6" rx="3" fill="rgba(255,255,255,0.08)"/>
+            <rect x="60" y="94" width="110" height="6" rx="3" fill="rgba(255,255,255,0.06)"/>
+            <rect x="60" y="120" width="50" height="28" rx="14" fill="rgba(200,245,66,0.2)"/>
+            <rect x="290" y="30" width="270" height="90" rx="10" fill="rgba(200,245,66,0.04)" stroke="rgba(200,245,66,0.1)" stroke-width="1"/>
+            <rect x="310" y="48" width="100" height="6" rx="3" fill="rgba(200,245,66,0.2)"/>
+            <rect x="310" y="64" width="200" height="5" rx="2.5" fill="rgba(255,255,255,0.06)"/>
+            <rect x="310" y="78" width="160" height="5" rx="2.5" fill="rgba(255,255,255,0.04)"/>
+            <text x="300" y="200" font-family="monospace" font-size="11" fill="rgba(200,245,66,0.4)">const app = () =&gt; &lt;Dashboard /&gt;;</text>
+            <text x="300" y="220" font-family="monospace" font-size="11" fill="rgba(200,245,66,0.2)">export default app;</text>
+          </svg>
+        </div>
+        <div class="thumb-overlay"></div>
+        <span class="card-type fs">Full-Stack</span>
+      </div>
+      <div class="card-body">
+        <h3>Carreira em Foco - TCC</h3>
+        <p>O Carreira em Foco nasceu com a ideia de desenvolver um guia de carreira capaz de trazer informações à respeito dos cursos mais procurados da atualidade de forma que nossos usuários pudessem navegar e descobrir novas profissões de maneira interativa e organizada.</p>
+        <div class="card-tags">
+          <span class="card-tag">HTML5</span>
+          <span class="card-tag">CSS3</span>
+          <span class="card-tag">JavaScript</span>
+          <span class="card-tag">PHP</span>
+          <span class="card-tag">SQL</span>
+          <span class="card-tag">Bootstrap</span>
+          <span class="card-tag">Photoshop</span>
+          <span class="card-tag">Canva</span>
+        </div>
+        <a href="https://github.com/heloisacadenas/Carreira-em-Foco" class="card-link" target="_blank">Ver projeto →</a>
+      </div>
+    </div>
+
+    <!-- BE featured -->
+    <div class="project-card featured reveal" data-cat="be">
+      <div class="card-thumb">
+        <!-- IMAGEM DO PROJETO: substitua o comentário abaixo por <img src="sua-imagem.jpg" alt="Turtle Race Game" class="project-img-slot"> -->
+        <img src="img/turtle.png" alt="Turtle Race Game" class="project-img-slot">
+        <div class="thumb-bg" style="background: linear-gradient(135deg, #0a100f 0%, #111e1c 100%);">
+          <svg width="100%" height="100%" style="position:absolute;inset:0;" viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg">
+            <rect x="30" y="30" width="160" height="220" rx="10" fill="rgba(255,107,53,0.05)" stroke="rgba(255,107,53,0.12)" stroke-width="1"/>
+            <text x="46" y="56" font-family="monospace" font-size="9.5" fill="rgba(255,107,53,0.5)">users</text>
+            <rect x="46" y="65" width="100" height="1" fill="rgba(255,107,53,0.2)"/>
+            <text x="46" y="84" font-family="monospace" font-size="8.5" fill="rgba(255,255,255,0.25)">id · uuid · PK</text>
+            <text x="46" y="98" font-family="monospace" font-size="8.5" fill="rgba(255,255,255,0.25)">email · varchar</text>
+            <text x="46" y="112" font-family="monospace" font-size="8.5" fill="rgba(255,255,255,0.25)">name · text</text>
+            <text x="46" y="126" font-family="monospace" font-size="8.5" fill="rgba(255,255,255,0.25)">role · enum</text>
+
+            <line x1="190" y1="90" x2="240" y2="90" stroke="rgba(255,107,53,0.25)" stroke-width="1" stroke-dasharray="4,3"/>
+            
+            <rect x="240" y="50" width="150" height="100" rx="10" fill="rgba(255,107,53,0.05)" stroke="rgba(255,107,53,0.12)" stroke-width="1"/>
+            <text x="256" y="72" font-family="monospace" font-size="9.5" fill="rgba(255,107,53,0.5)">orders</text>
+            <rect x="256" y="78" width="100" height="1" fill="rgba(255,107,53,0.2)"/>
+            <text x="256" y="96" font-family="monospace" font-size="8.5" fill="rgba(255,255,255,0.25)">id · uuid · PK</text>
+            <text x="256" y="110" font-family="monospace" font-size="8.5" fill="rgba(255,255,255,0.25)">user_id · FK</text>
+            <text x="256" y="124" font-family="monospace" font-size="8.5" fill="rgba(255,255,255,0.25)">total · decimal</text>
+
+            <line x1="390" y1="90" x2="430" y2="90" stroke="rgba(255,107,53,0.25)" stroke-width="1" stroke-dasharray="4,3"/>
+
+            <rect x="430" y="50" width="140" height="100" rx="10" fill="rgba(255,107,53,0.05)" stroke="rgba(255,107,53,0.12)" stroke-width="1"/>
+            <text x="446" y="72" font-family="monospace" font-size="9.5" fill="rgba(255,107,53,0.5)">products</text>
+            <rect x="446" y="78" width="100" height="1" fill="rgba(255,107,53,0.2)"/>
+            <text x="446" y="96" font-family="monospace" font-size="8.5" fill="rgba(255,255,255,0.25)">id · uuid · PK</text>
+            <text x="446" y="110" font-family="monospace" font-size="8.5" fill="rgba(255,255,255,0.25)">name · text</text>
+            <text x="446" y="124" font-family="monospace" font-size="8.5" fill="rgba(255,255,255,0.25)">price · decimal</text>
+
+            <text x="30" y="230" font-family="monospace" font-size="10" fill="rgba(255,107,53,0.3)">SELECT u.name, COUNT(o.id) FROM users u LEFT JOIN orders o...</text>
+          </svg>
+        </div>
+        <div class="thumb-overlay"></div>
+        <span class="card-type be">Back-End</span>
+      </div>
+      <div class="card-body">
+        <h3>Turtle Race Game</h3>
+        <p>Um simples e divertido jogo feito em Python usando a biblioteca Turtle, onde o jogador aposta na cor da tartaruga que acredita que vencerá a corrida.</p>
+        <div class="card-tags">
+          <span class="card-tag">Python</span>
+          <span class="card-tag">Biblioteca Turtle</span>
+          <span class="card-tag">Módulo Random</span>
+        </div>
+        <a href="https://github.com/heloisacadenas/Turtle-Race-Python-Game" class="card-link" target="_blank">Ver projeto →</a>
+      </div>
+    </div>
+
+    <!-- FE card -->
+    <div class="project-card reveal" data-cat="fe">
+      <div class="card-thumb">
+        <!-- IMAGEM DO PROJETO: substitua o comentário abaixo por <img src="sua-imagem.jpg" alt="Netflix Clone" class="project-img-slot"> -->
+        <img src="img/netflix.png" alt="Netflix Clone" class="project-img-slot">
+        <div class="thumb-bg" style="background: linear-gradient(135deg, #0d1616 0%, #0f2020 100%);">
+          <svg width="100%" height="100%" style="position:absolute;inset:0;" viewBox="0 0 280 220" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="20" width="240" height="30" rx="6" fill="rgba(200,245,66,0.05)" stroke="rgba(200,245,66,0.1)" stroke-width="1"/>
+            <circle cx="35" cy="35" r="5" fill="rgba(255,100,100,0.4)"/>
+            <circle cx="52" cy="35" r="5" fill="rgba(255,200,50,0.4)"/>
+            <circle cx="69" cy="35" r="5" fill="rgba(80,200,100,0.4)"/>
+            <rect x="20" y="64" width="240" height="136" rx="6" fill="rgba(200,245,66,0.03)" stroke="rgba(200,245,66,0.08)" stroke-width="1"/>
+            <rect x="32" y="80" width="60" height="5" rx="2.5" fill="rgba(200,245,66,0.35)"/>
+            <rect x="32" y="94" width="200" height="4" rx="2" fill="rgba(255,255,255,0.07)"/>
+            <rect x="32" y="106" width="170" height="4" rx="2" fill="rgba(255,255,255,0.05)"/>
+            <rect x="32" y="118" width="185" height="4" rx="2" fill="rgba(255,255,255,0.07)"/>
+            <rect x="32" y="148" width="80" height="22" rx="11" fill="rgba(200,245,66,0.15)" stroke="rgba(200,245,66,0.3)" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="thumb-overlay"></div>
+        <span class="card-type fe">Front-End</span>
+      </div>
+      <div class="card-body">
+        <h3>Netflix Clone - Home page</h3>
+        <p>Clone da página inicial da Netflix, desenvolvido no curso de Imersão Front-end com IA da Alura.</p>
+        <div class="card-tags">
+          <span class="card-tag">HTML5</span>
+          <span class="card-tag">CSS3</span>
+          <span class="card-tag">JavaScript</span>
+          <span class="card-tag">GitHub Copilot</span>
+        </div>
+        <a href="https://heloisacadenas.github.io/Netflix-Home-Page/" class="card-link" target="_blank">Ver projeto →</a>
+      </div>
+    </div>
+
+    <!-- UI featured -->
+    <div class="project-card featured reveal" data-cat="ui">
+      <div class="card-thumb">
+        <!-- IMAGEM DO PROJETO: substitua o comentário abaixo por <img src="sua-imagem.jpg" alt="S-kreate App" class="project-img-slot"> -->
+        <img src="img/skreate.png" alt="S-kreate App" class="project-img-slot">
+        <div class="thumb-bg" style="background: linear-gradient(135deg, #110f20 0%, #1a1535 100%);">
+          <svg width="100%" height="100%" style="position:absolute;inset:0;" viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg">
+            <rect x="30" y="20" width="180" height="240" rx="20" fill="rgba(139,92,246,0.07)" stroke="rgba(139,92,246,0.2)" stroke-width="1.5"/>
+            <rect x="50" y="52" width="140" height="100" rx="12" fill="rgba(139,92,246,0.1)"/>
+            <rect x="50" y="52" width="140" height="100" rx="12" fill="url(#purpleGrad)"/>
+            <defs>
+              <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.15"/>
+                <stop offset="100%" stop-color="#c084fc" stop-opacity="0.05"/>
+              </linearGradient>
+            </defs>
+            <rect x="50" y="165" width="70" height="6" rx="3" fill="rgba(255,255,255,0.2)"/>
+            <rect x="50" y="180" width="110" height="4" rx="2" fill="rgba(255,255,255,0.08)"/>
+            <rect x="50" y="205" width="50" height="20" rx="10" fill="rgba(139,92,246,0.3)"/>
+
+            <rect x="240" y="20" width="340" height="240" rx="16" fill="rgba(139,92,246,0.04)" stroke="rgba(139,92,246,0.1)" stroke-width="1"/>
+            <text x="260" y="52" font-family="sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,0.4)" letter-spacing="2">DESIGN SYSTEM</text>
+            <rect x="260" y="64" width="300" height="1" fill="rgba(139,92,246,0.15)"/>
+            
+            <rect x="260" y="80" width="40" height="40" rx="8" fill="rgba(139,92,246,0.2)"/>
+            <rect x="312" y="80" width="40" height="40" rx="8" fill="rgba(192,132,252,0.15)"/>
+            <rect x="364" y="80" width="40" height="40" rx="8" fill="rgba(167,139,250,0.1)"/>
+            <rect x="416" y="80" width="40" height="40" rx="20" fill="rgba(139,92,246,0.15)"/>
+            <rect x="468" y="80" width="80" height="40" rx="20" fill="rgba(139,92,246,0.25)"/>
+
+            <rect x="260" y="138" width="140" height="32" rx="8" fill="rgba(139,92,246,0.06)" stroke="rgba(139,92,246,0.15)" stroke-width="1"/>
+            <rect x="260" y="180" width="140" height="32" rx="8" fill="rgba(139,92,246,0.12)"/>
+            <rect x="260" y="222" width="80" height="22" rx="11" fill="rgba(139,92,246,0.25)"/>
+
+            <rect x="416" y="138" width="140" height="100" rx="10" fill="rgba(139,92,246,0.04)" stroke="rgba(139,92,246,0.1)" stroke-width="1"/>
+            <rect x="428" y="154" width="80" height="5" rx="2.5" fill="rgba(139,92,246,0.3)"/>
+            <rect x="428" y="168" width="110" height="4" rx="2" fill="rgba(255,255,255,0.07)"/>
+            <rect x="428" y="180" width="95" height="4" rx="2" fill="rgba(255,255,255,0.05)"/>
+          </svg>
+        </div>
+        <div class="thumb-overlay"></div>
+        <span class="card-type ui">UI/UX</span>
+      </div>
+      <div class="card-body">
+        <h3>S-kreate - App</h3>
+        <p>Aplicativo de compra e personalização de produtos de skate. Projeto realizado no curso de Design UX/UI do Senai.</p>
+        <div class="card-tags">
+          <span class="card-tag">Figma</span>
+          <span class="card-tag">Alta fidelidade</span>
+          <span class="card-tag">User research</span>
+        </div>
+        <a href="https://www.behance.net/gallery/240136011/S-Kreate-Personalizacao-de-produtos-de-Skate" class="card-link" target="_blank">Ver projeto →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="section-label reveal">Contato</div>
+  <div class="contact-wrap">
+    <div class="contact-left reveal">
+      <h2>Vamos construir algo juntos?</h2>
+      <p style="text-align: justify;">Estou aberta a novos projetos, colaborações e oportunidades. Se você tem uma ideia em mente ou quer bater um papo, me manda uma mensagem!</p>
+      <div class="contact-links">
+        <a href="mailto:heloisacadenas36@gmail.com" class="contact-link-item">
+          <div class="icon">✉</div>
+          <span>heloisacadenas36@gmail.com</span>
+          <span>Email</span>
+        </a>
+        <a href="https://wa.me/5511944522028" class="contact-link-item" target="_blank">
+          <div class="icon">📞</div>
+          <span>+55 (11) 94452-2028</span>
+          <span>Whatsapp</span>
+        </a>
+        <a href="https://www.linkedin.com/in/heloisacadenas" class="contact-link-item" target="_blank">
+          <div class="icon">in</div>
+          <span>linkedin.com/in/heloisacadenas</span>
+          <span>LinkedIn</span>
+        </a>
+        <a href="https://github.com/heloisacadenas" class="contact-link-item" target="_blank">
+          <div class="icon" style="font-size:0.9rem;"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 30 30" fill="white">
+    <path d="M15,3C8.373,3,3,8.373,3,15c0,5.623,3.872,10.328,9.092,11.63C12.036,26.468,12,26.28,12,26.047v-2.051 c-0.487,0-1.303,0-1.508,0c-0.821,0-1.551-0.353-1.905-1.009c-0.393-0.729-0.461-1.844-1.435-2.526 c-0.289-0.227-0.069-0.486,0.264-0.451c0.615,0.174,1.125,0.596,1.605,1.222c0.478,0.627,0.703,0.769,1.596,0.769 c0.433,0,1.081-0.025,1.691-0.121c0.328-0.833,0.895-1.6,1.588-1.962c-3.996-0.411-5.903-2.399-5.903-5.098 c0-1.162,0.495-2.286,1.336-3.233C9.053,10.647,8.706,8.73,9.435,8c1.798,0,2.885,1.166,3.146,1.481C13.477,9.174,14.461,9,15.495,9 c1.036,0,2.024,0.174,2.922,0.483C18.675,9.17,19.763,8,21.565,8c0.732,0.731,0.381,2.656,0.102,3.594 c0.836,0.945,1.328,2.066,1.328,3.226c0,2.697-1.904,4.684-5.894,5.097C18.199,20.49,19,22.1,19,23.313v2.734 c0,0.104-0.023,0.179-0.035,0.268C23.641,24.676,27,20.236,27,15C27,8.373,21.627,3,15,3z"></path>
+</svg></div>
+          <span>github.com/heloisacadenas</span>
+          <span>GitHub</span>
+        </a>
+        <a href="https://www.behance.net/heloisacadenas" class="contact-link-item" target="_blank">
+          <div class="icon" style="font-size:0.9rem;"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 30 30" fill="white">
+    <path d="M 6 4 C 4.895 4 4 4.895 4 6 L 4 24 C 4 25.105 4.895 26 6 26 L 24 26 C 25.105 26 26 25.105 26 24 L 26 6 C 26 4.895 25.105 4 24 4 L 6 4 z M 17.5 11 L 20.056641 11 C 20.332641 11 20.556641 11.224 20.556641 11.5 C 20.556641 11.776 20.332641 12 20.056641 12 L 17.5 12 C 17.224 12 17 11.776 17 11.5 C 17 11.224 17.224 11 17.5 11 z M 8.9199219 11.384766 L 11.705078 11.384766 C 13.349078 11.384766 14.330078 12.189047 14.330078 13.498047 C 14.330078 14.396047 13.665875 15.179594 12.796875 15.308594 L 12.796875 15.414062 C 13.918875 15.496063 14.734375 16.341594 14.734375 17.433594 C 14.735375 18.918594 13.613688 19.859375 11.804688 19.859375 L 8.9199219 19.859375 C 8.4119219 19.859375 8 19.447453 8 18.939453 L 8 12.304688 C 8 11.796688 8.4119219 11.384766 8.9199219 11.384766 z M 9.7734375 12.740234 L 9.7734375 14.896484 L 11.105469 14.896484 C 12.063469 14.897484 12.585937 14.503266 12.585938 13.822266 C 12.585938 13.147266 12.099906 12.740234 11.253906 12.740234 L 9.7734375 12.740234 z M 18.962891 13.240234 C 20.871891 13.240234 21.998047 14.456719 21.998047 16.511719 L 21.998047 17.033203 L 17.554688 17.033203 L 17.554688 17.121094 C 17.577687 18.084094 18.142156 18.683594 19.035156 18.683594 C 19.710156 18.683594 20.173469 18.443625 20.355469 18.015625 L 21.947266 18.015625 C 21.689266 19.237625 20.572328 20 18.986328 20 C 17.013328 20 15.851563 18.754344 15.851562 16.652344 C 15.851562 14.544344 17.036891 13.240234 18.962891 13.240234 z M 18.970703 14.550781 C 18.177703 14.550781 17.618547 15.101406 17.560547 15.941406 L 20.320312 15.941406 C 20.284313 15.084406 19.768703 14.550781 18.970703 14.550781 z M 9.7734375 16.095703 L 9.7734375 18.503906 L 11.353516 18.503906 C 12.375516 18.503906 12.927734 18.07325 12.927734 17.28125 C 12.927734 16.50525 12.3575 16.095703 11.3125 16.095703 L 9.7734375 16.095703 z"></path>
+</svg></div>
+          <span>behance.net/heloisacadenas</span>
+          <span>Behance</span>
+        </a>
+      </div>
+    </div>
+    <div class="reveal">
+  <!-- ID corrigido para contact-form -->
+  <form class="contact-form" id="contact-form">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nome</label>
+        <!-- Adicionado name="from_name" -->
+        <input type="text" name="from_name" placeholder="Seu nome completo" required>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <!-- Adicionado name="user_email" -->
+        <input type="email" name="user_email" placeholder="seu@email.com" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Assunto</label>
+      <select name="subject">
+        <option value="" disabled selected>Selecione um assunto</option>
+        <option value="Front-End">Projeto Front-End</option>
+        <option value="Back-End">Projeto Back-End</option>
+        <option value="UI UX">UI/UX Design</option>
+        <option value="Full-Stack">Projeto Full Stack</option>
+        <option value="Vaga">Oportunidade de trabalho</option>
+        <option value="Outro">Outro</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Mensagem</label>
+      <!-- Adicionado name="message" -->
+      <textarea name="message" placeholder="Fale mais sobre seu projeto ou ideia..." required></textarea>
+    </div>
+    <!-- type alterado para "submit" e removido o onclick -->
+    <button type="submit" class="btn-submit" id="submitBtn">
+      Enviar mensagem
+      <span>→</span>
+    </button>
+  </form>
+</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 — Heloisa <strong>♥</strong> Cadenas</p>
+  <div class="footer-links">
+    <a href="#sobre">Sobre mim</a>
+    <a href="#projetos">Projetos</a>
+    <a href="#contato">Contato</a>
+  </div>
+</footer>
+
+<script>
+
+  // ── EmailJS init ──────────────────────────────────────────────────────────
+  emailjs.init("PG7GMR3OecfgJS7ou");
+
+  // ── Hamburger menu ────────────────────────────────────────────────────────
+  const hamburger = document.getElementById('navHamburger');
+  const navMenu = document.getElementById('navMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    navMenu.classList.toggle('open');
+  });
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      navMenu.classList.remove('open');
+    });
+  });
+
+  // ── Custom cursor ─────────────────────────────────────────────────────────
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animCursor() {
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.14; ry += (my - ry) * 0.14;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+  document.querySelectorAll('a, button, .project-card, .skill-pill, .info-card').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.width = '20px'; cursor.style.height = '20px'; });
+    el.addEventListener('mouseleave', () => { cursor.style.width = '12px'; cursor.style.height = '12px'; });
+  });
+
+  // ── Scroll reveal ─────────────────────────────────────────────────────────
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const idx = Array.from(reveals).indexOf(e.target);
+        setTimeout(() => e.target.classList.add('visible'), 80 * (idx % 3));
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => revealObserver.observe(el));
+
+  // ── Project filter ────────────────────────────────────────────────────────
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const filter = tab.dataset.filter;
+      document.querySelectorAll('.project-card').forEach(card => {
+        card.classList.toggle('hidden', filter !== 'all' && card.dataset.cat !== filter);
+      });
+    });
+  });
+
+  // ── Nav active link on scroll ─────────────────────────────────────────────
+  const sections = document.querySelectorAll('section[id]');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    document.querySelectorAll('nav ul a').forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--text)' : '';
+    });
+  });
+
+  // ── Contact form submit via EmailJS ───────────────────────────────────────
+  document.getElementById('contact-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const submitBtn = this.querySelector('.btn-submit');
+    const originalHTML = submitBtn.innerHTML;
+
+    // Estado de carregamento
+    submitBtn.innerHTML = 'Enviando…';
+    submitBtn.disabled = true;
+
+    const SERVICE_ID  = 'service_99bn6s7';
+    const TEMPLATE_ID = 'template_hbc28co';
+
+    const templateParams = {
+    from_name: this.from_name.value,
+    user_email: this.user_email.value,
+    subject: this.subject.value,
+    message: this.message.value
+};
+
+    emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, this)
+      .then(() => {
+        submitBtn.innerHTML = originalHTML;
+        submitBtn.disabled = false;
+        this.reset();
+
+        Swal.fire({
+          title: 'Mensagem enviada!',
+          text: 'Obrigada pelo contato! Responderei o mais rápido possível.',
+          icon: 'success',
+          background: '#111111',
+          color: '#f0ebe0',
+          confirmButtonColor: '#ff00a2',
+          iconColor: '#c6ff33',
+          customClass: {
+            popup: 'swal-custom-popup',
+            title: 'swal-custom-title',
+            confirmButton: 'swal-custom-button'
+          }
+        });
+      })
+      .catch(err => {
+        submitBtn.innerHTML = originalHTML;
+        submitBtn.disabled = false;
+
+        Swal.fire({
+          title: 'Ops!',
+          text: 'Ocorreu um erro ao enviar. Tente novamente mais tarde.',
+          icon: 'error',
+          background: '#111111',
+          color: '#f0ebe0',
+          confirmButtonColor: '#ff00a2',
+          customClass: {
+            popup: 'swal-custom-popup',
+            title: 'swal-custom-title',
+            confirmButton: 'swal-custom-button'
+          }
+        });
+
+        console.error('EmailJS error:', err);
+      });
+  });
+
+</script>
+</body>
+</html>

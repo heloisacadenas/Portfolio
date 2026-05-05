@@ -1,5 +1,5 @@
 ## 🌸 Meu portfólio
-#### Portfólio desenvolvido para apresentar minha trajetrória acadêmica e profissional, juntamente aos meus projetos desenvolvidos, divididos em Front-end, Back-end, Full-stack e UI/UX Design.
+#### Portfólio pessoal para apresentar minha trajetrória acadêmica e profissional, juntamente aos meus projetos desenvolvidos, divididos em Front-end, Back-end, Full-stack e UI/UX Design.
 ## Preview
 ![Texto Alternativo](telas/home.png)
 ![Texto Alternativo](telas/sobre.png)
@@ -21,7 +21,7 @@
 - Envio e recebimento de emails
 - Acesso a links externos com facilidade
 - Alert customizado
-- Design estruturado e moderno
+- Design responsivo e moderno
 
 ## 💗 Desenvolvido por
 ### Heloisa Cadenas Maciel
